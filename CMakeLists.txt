@@ -24,10 +24,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.10)
 project(NvPipe VERSION 1.0.0 LANGUAGES CXX)
 
 SET(DEFAULT_BUILD_TYPE "Release")
+
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
@@ -46,6 +47,7 @@ find_library(CUDA_LIB NAMES cuda HINTS ${CUDA_LIB_DIR})
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 11)
+set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11" )
 
 # Options
 option(NVPIPE_WITH_ENCODER "Enables the NvPipe encoding interface." ON)
@@ -95,7 +97,6 @@ endif()
 include(GNUInstallDirs)
 
 cuda_add_library(${PROJECT_NAME} SHARED ${NVPIPE_SOURCES})
-set_property(TARGET ${PROJECT_NAME} PROPERTY CUDA_STANDARD 11)
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
@@ -104,7 +105,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:src/Video_Codec_SDK_9.0.20/Samples src/Video_Codec_SDK_9.0.20/Samples/NvCodec src/Video_Codec_SDK_9.0.20/include ${CUDA_INCLUDE_DIRS}>
     )
 target_link_libraries(${PROJECT_NAME} ${NVPIPE_LIBRARIES})
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION 1)
