@@ -95,7 +95,7 @@ endif()
 include(GNUInstallDirs)
 
 cuda_add_library(${PROJECT_NAME} SHARED ${NVPIPE_SOURCES})
-set_property(TARGET tgt PROPERTY CUDA_STANDARD 11)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CUDA_STANDARD 11)
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
